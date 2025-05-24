@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>LogicSurgeon - GitHub Blog</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Windows Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="windows-logo">
+                <i class="fab fa-microsoft"></i>
+            </div>
+            <div class="loading-text-container">
+                <div class="loading-scroll-text">
+                    HTML/CSS<br>
+                    JavaScript<br>
+                    Python<br>
+                    Medical AI<br>
+                    Orthopedic Surgery<br>
+                    Innovation 🚀
+                </div>
+            </div>
+            <div class="loading-spinner">
+                <div class="spinner-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent" style="display: none;">
+        <!-- Taskbar -->
+        <div class="taskbar">
+            <div class="taskbar-left">
+                <div class="start-button" onclick="toggleStartMenu()">
+                    <i class="fab fa-microsoft"></i>
+                </div>
+                <div class="taskbar-apps">
+                    <div class="taskbar-app active" onclick="showWindow('portfolio')">
+                        <i class="fas fa-user"></i>
+                        <span>Portfolio</span>
+                    </div>
+                    <div class="taskbar-app" onclick="showWindow('blog')">
+                        <i class="fas fa-blog"></i>
+                        <span>Blog</span>
+                    </div>
+                    <div class="taskbar-app" onclick="showWindow('projects')">
+                        <i class="fas fa-code"></i>
+                        <span>Projects</span>
+                    </div>
+                </div>
+            </div>
+            <div class="taskbar-right">
+                <div class="system-tray">
+                    <div class="datetime">
+                        <div id="current-time"></div>
+                        <div id="current-date"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Menu -->
+        <div class="start-menu" id="startMenu">
+            <div class="start-menu-header">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-info">
+                        <h3>LogicSurgeon</h3>
+                        <p>Developer & Medical Professional</p>
+                    </div>
+                </div>
+            </div>
+            <div class="start-menu-body">
+                <div class="menu-item" onclick="showWindow('about')">
+                    <i class="fas fa-info-circle"></i>
+                    <span>About Me</span>
+                </div>
+                <div class="menu-item" onclick="showWindow('skills')">
+                    <i class="fas fa-cogs"></i>
+                    <span>Skills</span>
+                </div>
+                <div class="menu-item" onclick="showWindow('contact')">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact</span>
+                </div>
+                <div class="menu-item" onclick="openLink('https://github.com/logicsurgeon')">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop -->
+        <div class="desktop">
+            <!-- Desktop Icons -->
+            <div class="desktop-icons-container">
+                <div class="desktop-icon" onclick="showWindow('portfolio')">
+                    <i class="fas fa-user"></i>
+                    <div class="icon-tooltip">Portfolio</div>
+                </div>
+                <div class="desktop-icon" onclick="showWindow('blog')">
+                    <i class="fas fa-blog"></i>
+                    <div class="icon-tooltip">Blog</div>
+                </div>
+                <div class="desktop-icon" onclick="showWindow('projects')">
+                    <i class="fas fa-folder"></i>
+                    <div class="icon-tooltip">Projects</div>
+                </div>
+                <div class="desktop-icon" onclick="showWindow('resume')">
+                    <i class="fas fa-file-alt"></i>
+                    <div class="icon-tooltip">Resume</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Music Player -->
+        <div class="music-player" id="musicPlayer">
+            <div class="music-control">
+                <i class="fas fa-music" onclick="toggleMusicPlayer()"></i>
+            </div>
+            <div class="music-panel" id="musicPanel">
+                <div class="music-header">
+                    <div class="now-playing">Now Playing</div>
+                    <div class="close-music" onclick="toggleMusicPlayer()">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div class="music-info">
+                    <div class="song-title" id="songTitle">Sunflower</div>
+                    <div class="song-artist" id="songArtist">Post Malone, Swae Lee</div>
+                </div>
+                <div class="music-controls">
+                    <div class="control-btn" onclick="previousTrack()">
+                        <i class="fas fa-step-backward"></i>
+                    </div>
+                    <div class="control-btn play-btn" onclick="togglePlay()" id="playBtn">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="control-btn" onclick="nextTrack()">
+                        <i class="fas fa-step-forward"></i>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                    <div class="time-info">
+                        <span id="currentTime">0:00</span>
+                        <span id="totalTime">3:38</span>
+                    </div>
+                </div>
+                <div class="volume-container">
+                    <i class="fas fa-volume-down"></i>
+                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+            <i class="fas fa-moon" id="darkModeIcon"></i>
+        </div>
+
+        <!-- Windows -->
+        <!-- Portfolio Window -->
+        <div class="window" id="portfolio">
+            <div class="window-header">
+                <div class="window-title">
+                    <i class="fas fa-user"></i>
+                    <span>Portfolio - LogicSurgeon</span>
+                </div>
+                <div class="window-controls">
+                    <button class="window-control minimize" onclick="minimizeWindow('portfolio')">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button class="window-control maximize" onclick="maximizeWindow('portfolio')">
+                        <i class="fas fa-square"></i>
+                    </button>
+                    <button class="window-control close" onclick="closeWindow('portfolio')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="portfolio-content">
+                    <div class="hero-section">
+                        <div class="hero-avatar">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h1>LogicSurgeon</h1>
+                        <h2>Orthopedic Surgeon & Developer</h2>
+                        <p>Bridging the gap between surgical precision and technological innovation.</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h3><i class="fas fa-user"></i> Profile</h3>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <h4>Orthopedic Surgery Residency</h4>
+                                <p>Specialized training in musculoskeletal surgery and trauma care</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h4>Medical School</h4>
+                                <p>Doctor of Medicine with focus on surgical disciplines</p>
+                            </div>
+                            <div class="timeline-item">
+                                <h4>Computer Science Background</h4>
+                                <p>Self-taught programming and software development</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3><i class="fas fa-code"></i> Skills</h3>
+                        <div class="skills-grid">
+                            <div class="skill-item">
+                                <i class="fas fa-stethoscope"></i>
+                                <span>Orthopedic Surgery</span>
+                            </div>
+                            <div class="skill-item">
+                                <i class="fas fa-bone"></i>
+                                <span>Trauma Care</span>
+                            </div>
+                            <div class="skill-item">
+                                <i class="fab fa-python"></i>
+                                <span>Python</span>
+                            </div>
+                            <div class="skill-item">
+                                <i class="fab fa-js"></i>
+                                <span>JavaScript</span>
+                            </div>
+                            <div class="skill-item">
+                                <i class="fas fa-robot"></i>
+                                <span>Medical AI</span>
+                            </div>
+                            <div class="skill-item">
+                                <i class="fas fa-chart-line"></i>
+                                <span>Data Analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blog Window -->
+        <div class="window" id="blog">
+            <div class="window-header">
+                <div class="window-title">
+                    <i class="fas fa-blog"></i>
+                    <span>Blog - Recent Posts</span>
+                </div>
+                <div class="window-controls">
+                    <button class="window-control minimize" onclick="minimizeWindow('blog')">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button class="window-control maximize" onclick="maximizeWindow('blog')">
+                        <i class="fas fa-square"></i>
+                    </button>
+                    <button class="window-control close" onclick="closeWindow('blog')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="blog-content">
+                    <div class="blog-post">
+                        <h3><i class="fas fa-robot"></i> AI in Orthopedic Surgery</h3>
+                        <p class="post-date">Dec 15, 2024</p>
+                        <p>Exploring how artificial intelligence is revolutionizing orthopedic surgery, from preoperative planning to postoperative care and patient outcomes...</p>
+                        <div class="post-tags">
+                            <span class="tag">AI</span>
+                            <span class="tag">Surgery</span>
+                            <span class="tag">Innovation</span>
+                        </div>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3><i class="fas fa-bone"></i> Modern Trauma Management</h3>
+                        <p class="post-date">Dec 10, 2024</p>
+                        <p>Advanced techniques in trauma surgery and how technology is improving patient outcomes in emergency orthopedic care...</p>
+                        <div class="post-tags">
+                            <span class="tag">Trauma</span>
+                            <span class="tag">Surgery</span>
+                            <span class="tag">Emergency Care</span>
+                        </div>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3><i class="fas fa-chart-line"></i> Digital Health in Orthopedics</h3>
+                        <p class="post-date">Dec 5, 2024</p>
+                        <p>The integration of digital health tools in orthopedic practice and their impact on patient care and surgical outcomes...</p>
+                        <div class="post-tags">
+                            <span class="tag">Digital Health</span>
+                            <span class="tag">Technology</span>
+                            <span class="tag">Patient Care</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Window -->
+        <div class="window" id="projects">
+            <div class="window-header">
+                <div class="window-title">
+                    <i class="fas fa-code"></i>
+                    <span>Projects - Development Portfolio</span>
+                </div>
+                <div class="window-controls">
+                    <button class="window-control minimize" onclick="minimizeWindow('projects')">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button class="window-control maximize" onclick="maximizeWindow('projects')">
+                        <i class="fas fa-square"></i>
+                    </button>
+                    <button class="window-control close" onclick="closeWindow('projects')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="projects-content">
+                    <div class="project-item">
+                        <div class="project-icon">
+                            <i class="fas fa-x-ray"></i>
+                        </div>
+                        <div class="project-info">
+                            <h3>Orthopedic Imaging AI</h3>
+                            <p>AI system for analyzing X-rays and MRI scans to assist in orthopedic diagnosis</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">Python</span>
+                                <span class="tech-tag">TensorFlow</span>
+                                <span class="tech-tag">OpenCV</span>
+                            </div>
+                            <div class="project-links">
+                                <button class="project-btn" onclick="openLink('#')">
+                                    <i class="fab fa-github"></i> GitHub
+                                </button>
+                                <button class="project-btn" onclick="openLink('#')">
+                                    <i class="fas fa-external-link-alt"></i> Demo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <div class="project-icon">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <div class="project-info">
+                            <h3>Surgical Planning Platform</h3>
+                            <p>3D visualization tool for preoperative planning in orthopedic surgery</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">React</span>
+                                <span class="tech-tag">Three.js</span>
+                                <span class="tech-tag">Node.js</span>
+                            </div>
+                            <div class="project-links">
+                                <button class="project-btn" onclick="openLink('#')">
+                                    <i class="fab fa-github"></i> GitHub
+                                </button>
+                                <button class="project-btn" onclick="openLink('#')">
+                                    <i class="fas fa-external-link-alt"></i> Demo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <div class="project-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="project-info">
+                            <h3>Patient Recovery Tracker</h3>
+                            <p>Mobile app for monitoring patient recovery progress after orthopedic surgery</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">React Native</span>
+                                <span class="tech-tag">Firebase</span>
+                                <span class="tech-tag">Chart.js</span>
+                            </div>
+                            <div class="project-links">
+                                <button class="project-btn" onclick="openLink('#')">
+                                    <i class="fab fa-github"></i> GitHub
+                                </button>
+                                <button class="project-btn" onclick="openLink('#')">
+                                    <i class="fas fa-external-link-alt"></i> Demo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resume Window -->
+        <div class="window" id="resume">
+            <div class="window-header">
+                <div class="window-title">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Resume - LogicSurgeon</span>
+                </div>
+                <div class="window-controls">
+                    <button class="window-control minimize" onclick="minimizeWindow('resume')">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button class="window-control maximize" onclick="maximizeWindow('resume')">
+                        <i class="fas fa-square"></i>
+                    </button>
+                    <button class="window-control close" onclick="closeWindow('resume')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="resume-content">
+                    <div class="resume-header">
+                        <h1>LogicSurgeon</h1>
+                        <h2>Orthopedic Surgeon & Developer</h2>
+                        <div class="contact-info">
+                            <span><i class="fas fa-envelope"></i> logicsurgeon@example.com</span>
+                            <span><i class="fab fa-github"></i> github.com/logicsurgeon</span>
+                            <span><i class="fab fa-linkedin"></i> linkedin.com/in/logicsurgeon</span>
+                        </div>
+                    </div>
+
+                    <div class="resume-section">
+                        <h3><i class="fas fa-briefcase"></i> Professional Experience</h3>
+                        <div class="experience-item">
+                            <h4>Orthopedic Surgery Resident</h4>
+                            <p class="company">University Medical Center</p>
+                            <p class="duration">2022 - Present</p>
+                            <ul>
+                                <li>Performed over 200 orthopedic surgical procedures</li>
+                                <li>Specialized in trauma and sports medicine</li>
+                                <li>Developed AI-assisted diagnostic tools</li>
+                            </ul>
+                        </div>
+                        <div class="experience-item">
+                            <h4>Medical Intern</h4>
+                            <p class="company">City General Hospital</p>
+                            <p class="duration">2021 - 2022</p>
+                            <ul>
+                                <li>Rotated through various medical specialties</li>
+                                <li>Implemented digital health solutions</li>
+                                <li>Led quality improvement initiatives</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="resume-section">
+                        <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                        <div class="education-item">
+                            <h4>Doctor of Medicine (M.D.)</h4>
+                            <p>Medical University - 2021</p>
+                        </div>
+                        <div class="education-item">
+                            <h4>Bachelor of Science in Biology</h4>
+                            <p>Tech University - 2017</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Window -->
+        <div class="window" id="about">
+            <div class="window-header">
+                <div class="window-title">
+                    <i class="fas fa-info-circle"></i>
+                    <span>About Me</span>
+                </div>
+                <div class="window-controls">
+                    <button class="window-control minimize" onclick="minimizeWindow('about')">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button class="window-control maximize" onclick="maximizeWindow('about')">
+                        <i class="fas fa-square"></i>
+                    </button>
+                    <button class="window-control close" onclick="closeWindow('about')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="about-content">
+                    <div class="about-section">
+                        <h3><i class="fas fa-user"></i> Introduction</h3>
+                        <p>Hello! I'm LogicSurgeon, an orthopedic surgeon who bridges the worlds of medicine and technology. 
+                        I combine surgical expertise with programming skills to create innovative solutions in healthcare.</p>
+                    </div>
+
+                    <div class="about-section">
+                        <h3><i class="fas fa-target"></i> Mission</h3>
+                        <p>My mission is to improve patient outcomes through the integration of technology in orthopedic care. 
+                        I develop AI-powered tools and digital solutions to enhance surgical precision and patient care.</p>
+                    </div>
+
+                    <div class="about-section">
+                        <h3><i class="fas fa-heart"></i> Areas of Expertise</h3>
+                        <ul>
+                            <li>Orthopedic Surgery & Trauma Care</li>
+                            <li>Medical AI & Machine Learning</li>
+                            <li>Surgical Planning & Navigation</li>
+                            <li>Digital Health Solutions</li>
+                            <li>Medical Data Analysis</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Window -->
+        <div class="window" id="contact">
+            <div class="window-header">
+                <div class="window-title">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact</span>
+                </div>
+                <div class="window-controls">
+                    <button class="window-control minimize" onclick="minimizeWindow('contact')">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button class="window-control maximize" onclick="maximizeWindow('contact')">
+                        <i class="fas fa-square"></i>
+                    </button>
+                    <button class="window-control close" onclick="closeWindow('contact')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="contact-content">
+                    <div class="contact-section">
+                        <h3><i class="fas fa-paper-plane"></i> Get in Touch</h3>
+                        <p>Feel free to contact me for collaboration opportunities, medical consultations, or technology discussions!</p>
+                    </div>
+
+                    <div class="contact-links">
+                        <a href="mailto:logicsurgeon@example.com" class="contact-link">
+                            <i class="fas fa-envelope"></i>
+                            <span>Email</span>
+                        </a>
+                        <a href="https://github.com/logicsurgeon" class="contact-link" target="_blank">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://linkedin.com/in/logicsurgeon" class="contact-link" target="_blank">
+                            <i class="fab fa-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="https://twitter.com/logicsurgeon" class="contact-link" target="_blank">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                    </div>
+
+                    <div class="contact-form">
+                        <h4>Send Message</h4>
+                        <form>
+                            <input type="text" placeholder="Name" required>
+                            <input type="email" placeholder="Email" required>
+                            <input type="text" placeholder="Subject" required>
+                            <textarea placeholder="Message" rows="5" required></textarea>
+                            <button type="submit">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
