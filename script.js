@@ -1,3 +1,181 @@
+// Typing animation control
+function initializeTypingAnimation() {
+    const typingElement = document.querySelector('.typing-text-bg');
+    if (!typingElement) return;
+    
+    const firstPart = 'We are';
+    const secondPart = ' Team Framing.';
+    const fullText = firstPart + secondPart;
+    let currentCycle = 0;
+    const maxCycles = 2;
+    let isTyping = true;
+    let currentIndex = 0;
+    let isSecondPart = false;
+    let isWaitingForSecondPart = false;
+    
+    // Start cursor blinking immediately
+    startCursorBlink(typingElement);
+    
+    function typeText() {
+        if (currentCycle >= maxCycles) {
+            // Final cycle: type smoothly and keep the text without deletion
+            if (isTyping) {
+                if (!isSecondPart && currentIndex <= firstPart.length) {
+                    // Type "We are"
+                    typingElement.textContent = firstPart.substring(0, currentIndex);
+                    currentIndex++;
+                    
+                    if (currentIndex > firstPart.length) {
+                        // Wait 1.5 seconds before typing second part
+                        isWaitingForSecondPart = true;
+                        setTimeout(() => {
+                            isSecondPart = true;
+                            isWaitingForSecondPart = false;
+                            currentIndex = firstPart.length;
+                            typeText();
+                        }, 1500);
+                        return;
+                    }
+                    
+                    // Continue typing first part
+                    setTimeout(typeText, getSmoothTypingSpeed());
+                    return;
+                }
+                
+                if (isSecondPart && currentIndex <= fullText.length) {
+                    // Type " Team Framing."
+                    typingElement.textContent = fullText.substring(0, currentIndex);
+                    currentIndex++;
+                    
+                    if (currentIndex > fullText.length) {
+                        // Animation complete, text stays displayed
+                        return;
+                    }
+                    
+                    // Continue typing second part
+                    setTimeout(typeText, getSmoothTypingSpeed());
+                    return;
+                }
+            }
+            return;
+        }
+        
+        if (isTyping) {
+            // Typing phase for cycles 1 and 2
+            if (!isSecondPart && currentIndex <= firstPart.length) {
+                // Type "We are"
+                typingElement.textContent = firstPart.substring(0, currentIndex);
+                currentIndex++;
+                
+                if (currentIndex > firstPart.length) {
+                    // Wait 1.5 seconds before typing second part
+                    isWaitingForSecondPart = true;
+                    setTimeout(() => {
+                        isSecondPart = true;
+                        isWaitingForSecondPart = false;
+                        currentIndex = firstPart.length;
+                        typeText();
+                    }, 1500);
+                    return;
+                }
+                
+                // Continue typing first part
+                setTimeout(typeText, getSmoothTypingSpeed());
+                return;
+            }
+            
+            if (isSecondPart && currentIndex <= fullText.length) {
+                // Type " Team Framing."
+                typingElement.textContent = fullText.substring(0, currentIndex);
+                currentIndex++;
+                
+                if (currentIndex > fullText.length) {
+                    // Hold the complete text for 1.5 seconds
+                    setTimeout(() => {
+                        isTyping = false;
+                        currentIndex = fullText.length;
+                        typeText();
+                    }, 1500);
+                    return;
+                }
+                
+                // Continue typing second part
+                setTimeout(typeText, getSmoothTypingSpeed());
+                return;
+            }
+        } else {
+            // Deleting phase
+            if (currentIndex >= 0) {
+                typingElement.textContent = fullText.substring(0, currentIndex);
+                currentIndex--;
+                
+                if (currentIndex < 0) {
+                    // Start next cycle
+                    currentCycle++;
+                    isTyping = true;
+                    isSecondPart = false;
+                    isWaitingForSecondPart = false;
+                    currentIndex = 0;
+                    
+                    // Pause before starting next cycle
+                    setTimeout(() => {
+                        typeText();
+                    }, 300);
+                    return;
+                }
+            }
+            
+            // Continue deleting
+            setTimeout(typeText, getSmoothDeletingSpeed());
+        }
+    }
+    
+    // Smooth and consistent typing speed
+    function getSmoothTypingSpeed() {
+        return 90; // Fixed 90ms for smooth, consistent typing
+    }
+    
+    // Smooth and consistent deleting speed
+    function getSmoothDeletingSpeed() {
+        return 60; // Fixed 60ms for smooth, consistent deleting
+    }
+    
+    // Start the typing animation after a short delay
+    setTimeout(typeText, 500);
+}
+
+function startCursorBlink(element) {
+    const isDarkMode = document.body.hasAttribute('data-theme');
+    const cursorColor = isDarkMode ? 'rgba(0, 255, 255, 1)' : 'rgba(0, 240, 255, 0.9)';
+    
+    function blink() {
+        const currentColor = element.style.borderRightColor;
+        if (currentColor === 'transparent' || currentColor === '') {
+            element.style.borderRightColor = cursorColor;
+        } else {
+            element.style.borderRightColor = 'transparent';
+        }
+    }
+    
+    // Blink every 750ms
+    setInterval(blink, 750);
+    
+    // Update cursor color when theme changes
+    const observer = new MutationObserver(() => {
+        const newIsDarkMode = document.body.hasAttribute('data-theme');
+        const newCursorColor = newIsDarkMode ? 'rgba(0, 255, 255, 1)' : 'rgba(0, 240, 255, 0.9)';
+        // Only update if currently visible
+        if (element.style.borderRightColor !== 'transparent') {
+            element.style.borderRightColor = newCursorColor;
+        }
+    });
+    
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+    });
+}
+
 // Global variables
 let draggedWindow = null;
 let dragOffset = { x: 0, y: 0 };
@@ -38,6 +216,9 @@ function initializeApp() {
     initializeWindows();
     initializeDesktopInteractions();
     initializeDarkMode();
+    
+    // Initialize typing animation
+    initializeTypingAnimation();
     
     // Portfolio window auto-popup disabled
     // setTimeout(() => {

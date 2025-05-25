@@ -448,13 +448,8 @@ body {
     overflow: hidden;
     font-size: 3rem;
     font-weight: bold;
-    width: 0;
-    animation: typing-sequence-bg 8s steps(20, end) infinite,
-               blink-caret-bg 0.75s step-end infinite;
     text-shadow: 0 0 10px rgba(0, 240, 255, 0.7), 0 0 0 rgba(0, 240, 255, 0.5);
-    /* Background blur effect removed */
-    /* -webkit-backdrop-filter: blur(2px); */
-    /* backdrop-filter: blur(2px); */
+    /* Animation will be controlled by JavaScript */
 }
 
 @keyframes typing-sequence-bg {
@@ -475,8 +470,7 @@ body {
 [data-theme="dark"] .typing-text-bg {
     color: rgba(0, 255, 255, 1);
     border-right-color: rgba(0, 255, 255, 1);
-    animation: typing-sequence-bg 8s steps(20, end) infinite,
-               blink-caret-bg-dark 0.75s step-end infinite;
+    /* Animation will be controlled by JavaScript */
 }
 
 @keyframes blink-caret-bg-dark {
