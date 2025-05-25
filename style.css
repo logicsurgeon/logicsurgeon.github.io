@@ -582,9 +582,9 @@ body {
     height: calc(100vh - 48px);
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
-    padding-bottom: 80px;
+    padding-bottom: 100px;
     background: url('./Framing.png') center center no-repeat;
     background-size: contain;
     background-color: var(--bg-gradient-start);
@@ -594,12 +594,14 @@ body {
     display: flex;
     gap: 40px;
     align-items: center;
+    justify-content: center;
 }
 
 .desktop-icon {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
     padding: 20px 15px;
     border-radius: 12px;
@@ -611,6 +613,8 @@ body {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    width: 120px;
+    height: 120px;
 }
 
 .desktop-icon:hover {
@@ -624,6 +628,11 @@ body {
     margin-bottom: 10px;
     color: var(--accent-color);
     transition: all 0.15s ease;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .desktop-icon:hover i {
@@ -1320,8 +1329,22 @@ body {
     }
     
     .desktop-icons-container {
-        flex-direction: column;
+        flex-direction: row;
         gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .desktop-icon {
+        width: 100px;
+        height: 100px;
+        padding: 15px 10px;
+    }
+    
+    .desktop-icon i {
+        font-size: 40px;
+        width: 40px;
+        height: 40px;
     }
     
     .taskbar-app span {
