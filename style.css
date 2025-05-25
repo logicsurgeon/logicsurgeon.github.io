@@ -175,6 +175,7 @@ body {
     width: 50px;
     height: 50px;
     background: rgba(255, 255, 255, 0.9);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-radius: 12px;
     display: flex;
@@ -200,6 +201,7 @@ body {
     right: 0;
     width: 320px;
     background: var(--taskbar-bg);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-radius: 12px;
     padding: 20px;
@@ -373,6 +375,7 @@ body {
     width: 50px;
     height: 50px;
     background: rgba(255, 255, 255, 0.9);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-radius: 12px;
     display: flex;
@@ -413,6 +416,7 @@ body {
     right: 0;
     height: 48px;
     background: var(--taskbar-bg);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     display: flex;
     justify-content: space-between;
@@ -503,6 +507,7 @@ body {
     left: 0;
     width: 320px;
     background: var(--taskbar-bg);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-radius: 8px 8px 0 0;
     display: none;
@@ -610,17 +615,18 @@ body {
     animation: typing-sequence-bg 8s steps(20, end) infinite,
                blink-caret-bg 0.75s step-end infinite;
     text-shadow: 0 0 20px rgba(0, 240, 255, 0.7), 0 0 40px rgba(0, 240, 255, 0.5);
+    -webkit-backdrop-filter: blur(2px);
     backdrop-filter: blur(2px);
 }
 
 @keyframes typing-sequence-bg {
     0%   { width: 0; }
-    15%  { width: 7ch; }      /* "We are" 타이핑 완료 */
-    25%  { width: 7ch; }      /* 정지 상태 */
-    45%  { width: 20ch; }     /* "TEAM FRAMING" 추가 타이핑 */
-    75%  { width: 20ch; }     /* 전체 문장 유지 */
-    85%  { width: 0; }        /* 삭제 시작 */
-    100% { width: 0; }        /* 삭제 완료 */
+    15%  { width: 7ch; }      /* "We are" typing complete */
+    25%  { width: 7ch; }      /* Hold state */
+    45%  { width: 20ch; }     /* "TEAM FRAMING" additional typing */
+    75%  { width: 20ch; }     /* Maintain full sentence */
+    85%  { width: 0; }        /* Start deletion */
+    100% { width: 0; }        /* Complete deletion */
 }
 
 @keyframes blink-caret-bg {
@@ -632,9 +638,11 @@ body {
     color: rgba(0, 255, 255, 1);
     border-right-color: rgba(0, 255, 255, 1);
     text-shadow: 0 0 25px rgba(0, 255, 255, 0.8), 0 0 50px rgba(0, 255, 255, 0.6);
+    animation: typing-sequence-bg 8s steps(20, end) infinite,
+               blink-caret-bg-dark 0.75s step-end infinite;
 }
 
-[data-theme="dark"] @keyframes blink-caret-bg {
+@keyframes blink-caret-bg-dark {
     0%, 100% { border-color: transparent; }
     50%      { border-color: rgba(0, 255, 255, 1); }
 }
@@ -659,6 +667,7 @@ body {
     user-select: none;
     position: relative;
     background: rgba(0, 0, 0, 0.2);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
