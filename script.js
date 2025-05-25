@@ -216,6 +216,12 @@ function initializeApp() {
     initializeWindows();
     initializeDesktopInteractions();
     initializeDarkMode();
+    checkMinimumHeight(); // Check initial height
+    
+    // Adjust text position before starting animation
+    setTimeout(() => {
+        adjustTypingTextPosition();
+    }, 100);
     
     // Initialize typing animation
     initializeTypingAnimation();
@@ -227,6 +233,62 @@ function initializeApp() {
     
     // Update time every second
     setInterval(updateDateTime, 1000);
+}
+
+// Check and enforce minimum height
+function checkMinimumHeight() {
+    const minHeight = 550;
+    const currentHeight = window.innerHeight;
+    
+    if (currentHeight < minHeight) {
+        document.body.style.overflow = 'auto';
+        document.body.style.minHeight = minHeight + 'px';
+        showNotification(`최적의 화면 경험을 위해 브라우저 높이를 ${minHeight}px 이상으로 설정해주세요.`, 'info');
+    } else {
+        document.body.style.overflow = 'hidden';
+        document.body.style.minHeight = '100vh';
+    }
+    
+    // Adjust typing text position
+    adjustTypingTextPosition();
+}
+
+// Adjust typing animation text position to avoid overlapping with icons
+function adjustTypingTextPosition() {
+    const typingBg = document.querySelector('.typing-animation-background');
+    const iconsContainer = document.querySelector('.desktop-icons-container');
+    
+    if (!typingBg || !iconsContainer) return;
+    
+    const windowHeight = window.innerHeight;
+    const windowWidth = window.innerWidth;
+    const isMobile = windowWidth <= 768;
+    
+    const taskbarHeight = 48;
+    const iconContainerHeight = isMobile ? 200 : 120; // Mobile icons take more space (2x2 grid)
+    const bottomPadding = isMobile ? 100 : 100;
+    const textBuffer = isMobile ? 30 : 50;
+    
+    // Calculate the maximum Y position for the text (icons top position - buffer)
+    const iconsTopPosition = windowHeight - taskbarHeight - bottomPadding - iconContainerHeight;
+    const maxTextBottom = iconsTopPosition - textBuffer;
+    
+    // Calculate default text position (50% for desktop, 40% for mobile)
+    const defaultTopPercentage = isMobile ? 40 : 50;
+    const defaultTextCenter = windowHeight * (defaultTopPercentage / 100);
+    const textHeight = isMobile ? 50 : 60;
+    const defaultTextBottom = defaultTextCenter + (textHeight / 2);
+    
+    // If text would overlap with icons, move it up
+    if (defaultTextBottom > maxTextBottom) {
+        const newTextCenter = maxTextBottom - (textHeight / 2);
+        const newTopPercentage = (newTextCenter / windowHeight) * 100;
+        const minTopPercentage = isMobile ? 10 : 15;
+        typingBg.style.top = Math.max(minTopPercentage, newTopPercentage) + '%';
+    } else {
+        // Reset to default position when there's enough space
+        typingBg.style.top = defaultTopPercentage + '%';
+    }
 }
 
 
@@ -663,8 +725,36 @@ function switchToNextWindow() {
     }
 }
 
-// Window resize handling
+// Window resize handling with minimum height enforcement
+let resizeWarningShown = false;
+
 window.addEventListener('resize', function() {
+    const minHeight = 550;
+    const currentHeight = window.innerHeight;
+    
+    // Show warning if window height is too small
+    if (currentHeight < minHeight && !resizeWarningShown) {
+        showNotification(`최적의 화면 경험을 위해 브라우저 높이를 ${minHeight}px 이상으로 설정해주세요.`, 'info');
+        resizeWarningShown = true;
+        
+        // Reset warning flag after 5 seconds
+        setTimeout(() => {
+            resizeWarningShown = false;
+        }, 5000);
+    }
+    
+    // Apply minimum height styles when window is too small
+    if (currentHeight < minHeight) {
+        document.body.style.overflow = 'auto';
+        document.body.style.minHeight = minHeight + 'px';
+    } else {
+        document.body.style.overflow = 'hidden';
+        document.body.style.minHeight = '100vh';
+    }
+    
+    // Adjust typing text position on resize
+    adjustTypingTextPosition();
+    
     const windows = document.querySelectorAll('.window');
     
     windows.forEach(window => {

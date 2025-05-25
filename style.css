@@ -36,7 +36,8 @@ body {
     background: #000000;
     background-attachment: fixed;
     height: 100vh;
-    overflow: hidden;
+    min-height: 550px;
+    overflow: auto;
     position: relative;
     color: var(--text-color);
     transition: all 0.3s ease;
@@ -439,6 +440,7 @@ body {
     transform: translate(-50%, -50%);
     z-index: 1;
     font-family: 'Courier New', monospace;
+    transition: top 0.3s ease;
 }
 
 .typing-text-bg {
@@ -1218,10 +1220,14 @@ body {
     }
     
     .desktop-icons-container {
-        flex-direction: row;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
         gap: 20px;
-        flex-wrap: wrap;
-        justify-content: center;
+        justify-items: center;
+        align-items: center;
+        max-width: 280px;
+        margin: 0 auto;
     }
     
     .desktop-icon {
@@ -1278,12 +1284,13 @@ body {
     }
     
     .typing-animation-background {
-        top: 50%;
+        top: 40%; /* Slightly higher on mobile */
         left: 50%;
         transform: translate(-50%, -50%);
         right: auto;
         bottom: auto;
         text-align: center;
+        transition: top 0.3s ease;
     }
     
     .typing-text-bg {
