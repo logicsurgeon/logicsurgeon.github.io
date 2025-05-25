@@ -158,7 +158,7 @@ function startCursorBlink(element) {
     }
     
     // Blink every 750ms
-    setInterval(blink, 750);
+    const blinkInterval = setInterval(blink, 750);
     
     // Update cursor color when theme changes
     const observer = new MutationObserver(() => {
@@ -174,6 +174,32 @@ function startCursorBlink(element) {
         attributes: true,
         attributeFilter: ['data-theme']
     });
+    
+    // 윈도우 리사이즈 시 커서 재설정
+    function resetCursorOnResize() {
+        // 잠깐 커서를 숨김
+        element.style.borderRightColor = 'transparent';
+        
+        // 100ms 후 다시 표시
+        setTimeout(() => {
+            const currentIsDarkMode = document.body.hasAttribute('data-theme');
+            const currentCursorColor = currentIsDarkMode ? 'rgba(0, 255, 255, 1)' : 'rgba(0, 240, 255, 0.9)';
+            element.style.borderRightColor = currentCursorColor;
+        }, 100);
+    }
+    
+    // 리사이즈 이벤트 리스너 추가
+    window.addEventListener('resize', resetCursorOnResize);
+    
+    return {
+        interval: blinkInterval,
+        observer: observer,
+        cleanup: () => {
+            clearInterval(blinkInterval);
+            observer.disconnect();
+            window.removeEventListener('resize', resetCursorOnResize);
+        }
+    };
 }
 
 // Global variables
@@ -268,7 +294,17 @@ function adjustTypingTextPosition() {
     const iconContainerHeight = isMobile ? 200 : 120;
     const bottomPadding = isMobile ? 100 : 100;
     const textBuffer = isMobile ? 30 : 50;
-    const textHeight = isMobile ? 50 : 60;
+    
+    // clamp(1.2rem, 4vw, 3rem)에 맞는 동적 텍스트 높이 계산
+    // 4vw 기준으로 계산하되, 최소/최대값 적용
+    const viewportWidth = windowWidth;
+    const calculatedVw = viewportWidth * 0.04; // 4vw 계산
+    const minSize = 19.2; // 1.2rem ≈ 19.2px (16px 기준)
+    const maxSize = 48; // 3rem ≈ 48px
+    
+    // clamp 로직 적용
+    const actualFontSize = Math.max(minSize, Math.min(calculatedVw, maxSize));
+    const textHeight = actualFontSize + 10; // 폰트 크기 + 여백
     
     // Calculate default positions
     const defaultTextTopPercentage = isMobile ? 40 : 50;
