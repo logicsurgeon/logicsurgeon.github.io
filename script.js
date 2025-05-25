@@ -3,7 +3,7 @@ let draggedWindow = null;
 let dragOffset = { x: 0, y: 0 };
 let activeWindow = null;
 let zIndexCounter = 100;
-let isDarkMode = false;
+let isDarkMode = true;
 let isLoading = true;
 
 
@@ -52,6 +52,10 @@ function initializeApp() {
 
 // Dark Mode functions
 function initializeDarkMode() {
+    // Apply dark mode initially since isDarkMode is true
+    if (isDarkMode) {
+        document.body.setAttribute('data-theme', 'dark');
+    }
     updateDarkModeIcon();
 }
 
