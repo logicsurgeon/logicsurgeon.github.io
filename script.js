@@ -318,8 +318,7 @@ function showWindow(windowId) {
         // Set as active window
         activeWindow = window;
         
-        // Add click sound effect (optional)
-        playClickSound();
+        // Click sound effect removed
     }
 }
 
@@ -513,31 +512,7 @@ function createRippleEffect(event, element) {
     }, 600);
 }
 
-// Sound effects (optional)
-function playClickSound() {
-    // Create audio context for click sound
-    if (typeof(AudioContext) !== "undefined" || typeof(webkitAudioContext) !== "undefined") {
-        try {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.1);
-        } catch (e) {
-            // Audio not supported, continue silently
-        }
-    }
-}
+// Sound effects removed for silent operation
 
 // Utility functions
 function openLink(url) {

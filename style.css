@@ -590,6 +590,54 @@ body {
     background-color: var(--bg-gradient-start);
 }
 
+/* Typing Animation Background */
+.typing-animation-background {
+    position: absolute;
+    bottom: 200px;
+    left: 50px;
+    z-index: 1;
+    font-family: 'Courier New', monospace;
+}
+
+.typing-text-bg {
+    color: rgba(0, 240, 255, 0.6);
+    border-right: 0.15em solid rgba(0, 240, 255, 0.6);
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 2rem;
+    width: 0;
+    animation: typing-sequence-bg 8s steps(20, end) infinite,
+               blink-caret-bg 0.75s step-end infinite;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    backdrop-filter: blur(2px);
+}
+
+@keyframes typing-sequence-bg {
+    0%   { width: 0; }
+    15%  { width: 7ch; }      /* "We are" 타이핑 완료 */
+    25%  { width: 7ch; }      /* 정지 상태 */
+    45%  { width: 20ch; }     /* "TEAM FRAMING" 추가 타이핑 */
+    75%  { width: 20ch; }     /* 전체 문장 유지 */
+    85%  { width: 0; }        /* 삭제 시작 */
+    100% { width: 0; }        /* 삭제 완료 */
+}
+
+@keyframes blink-caret-bg {
+    0%, 100% { border-color: transparent; }
+    50%      { border-color: rgba(0, 240, 255, 0.6); }
+}
+
+[data-theme="dark"] .typing-text-bg {
+    color: rgba(0, 255, 255, 0.8);
+    border-right-color: rgba(0, 255, 255, 0.8);
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+}
+
+[data-theme="dark"] @keyframes blink-caret-bg {
+    0%, 100% { border-color: transparent; }
+    50%      { border-color: rgba(0, 255, 255, 0.8); }
+}
+
 .desktop-icons-container {
     display: flex;
     gap: 40px;
@@ -1393,5 +1441,16 @@ body {
 
     .dark-mode-toggle {
         bottom: 120px;
+    }
+    
+    .typing-animation-background {
+        bottom: 140px;
+        left: 20px;
+        right: 20px;
+        text-align: center;
+    }
+    
+    .typing-text-bg {
+        font-size: 1.5rem;
     }
 }
