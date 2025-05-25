@@ -33,7 +33,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    background: #000000;
     background-attachment: fixed;
     height: 100vh;
     overflow: hidden;
@@ -585,30 +585,31 @@ body {
     align-items: flex-end;
     justify-content: center;
     padding-bottom: 100px;
-    background: url('./Framing.png') center center no-repeat;
+    background: #000000;
     background-size: contain;
-    background-color: var(--bg-gradient-start);
 }
 
 /* Typing Animation Background */
 .typing-animation-background {
     position: absolute;
-    bottom: 200px;
-    left: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
     font-family: 'Courier New', monospace;
 }
 
 .typing-text-bg {
-    color: rgba(0, 240, 255, 0.6);
-    border-right: 0.15em solid rgba(0, 240, 255, 0.6);
+    color: rgba(0, 240, 255, 0.9);
+    border-right: 0.15em solid rgba(0, 240, 255, 0.9);
     white-space: nowrap;
     overflow: hidden;
-    font-size: 2rem;
+    font-size: 3rem;
+    font-weight: bold;
     width: 0;
     animation: typing-sequence-bg 8s steps(20, end) infinite,
                blink-caret-bg 0.75s step-end infinite;
-    text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.7), 0 0 40px rgba(0, 240, 255, 0.5);
     backdrop-filter: blur(2px);
 }
 
@@ -624,18 +625,18 @@ body {
 
 @keyframes blink-caret-bg {
     0%, 100% { border-color: transparent; }
-    50%      { border-color: rgba(0, 240, 255, 0.6); }
+    50%      { border-color: rgba(0, 240, 255, 0.9); }
 }
 
 [data-theme="dark"] .typing-text-bg {
-    color: rgba(0, 255, 255, 0.8);
-    border-right-color: rgba(0, 255, 255, 0.8);
-    text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    color: rgba(0, 255, 255, 1);
+    border-right-color: rgba(0, 255, 255, 1);
+    text-shadow: 0 0 25px rgba(0, 255, 255, 0.8), 0 0 50px rgba(0, 255, 255, 0.6);
 }
 
 [data-theme="dark"] @keyframes blink-caret-bg {
     0%, 100% { border-color: transparent; }
-    50%      { border-color: rgba(0, 255, 255, 0.8); }
+    50%      { border-color: rgba(0, 255, 255, 1); }
 }
 
 .desktop-icons-container {
@@ -1444,13 +1445,16 @@ body {
     }
     
     .typing-animation-background {
-        bottom: 140px;
-        left: 20px;
-        right: 20px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        right: auto;
+        bottom: auto;
         text-align: center;
     }
     
     .typing-text-bg {
-        font-size: 1.5rem;
+        font-size: 2rem;
+        font-weight: bold;
     }
 }
