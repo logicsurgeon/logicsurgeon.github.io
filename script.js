@@ -243,7 +243,7 @@ function checkMinimumHeight() {
     if (currentHeight < minHeight) {
         document.body.style.overflow = 'auto';
         document.body.style.minHeight = minHeight + 'px';
-        showNotification(`최적의 화면 경험을 위해 브라우저 높이를 ${minHeight}px 이상으로 설정해주세요.`, 'info');
+        // Notification removed - no more popup
     } else {
         document.body.style.overflow = 'hidden';
         document.body.style.minHeight = '100vh';
@@ -749,22 +749,11 @@ function switchToNextWindow() {
 }
 
 // Window resize handling with minimum height enforcement
-let resizeWarningShown = false;
-
 window.addEventListener('resize', function() {
     const minHeight = 550;
     const currentHeight = window.innerHeight;
     
-    // Show warning if window height is too small
-    if (currentHeight < minHeight && !resizeWarningShown) {
-        showNotification(`최적의 화면 경험을 위해 브라우저 높이를 ${minHeight}px 이상으로 설정해주세요.`, 'info');
-        resizeWarningShown = true;
-        
-        // Reset warning flag after 5 seconds
-        setTimeout(() => {
-            resizeWarningShown = false;
-        }, 5000);
-    }
+    // Notification removed - no more popup on resize
     
     // Apply minimum height styles when window is too small
     if (currentHeight < minHeight) {
