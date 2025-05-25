@@ -39,10 +39,10 @@ function initializeApp() {
     initializeDesktopInteractions();
     initializeDarkMode();
     
-    // Show portfolio window by default with faster animation
-    setTimeout(() => {
-        showWindow('portfolio');
-    }, 200);
+    // Portfolio window auto-popup disabled
+    // setTimeout(() => {
+    //     showWindow('portfolio');
+    // }, 200);
     
     // Update time every second
     setInterval(updateDateTime, 1000);
