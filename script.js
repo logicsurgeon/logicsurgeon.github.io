@@ -5,35 +5,7 @@ let activeWindow = null;
 let zIndexCounter = 100;
 let isDarkMode = false;
 let isLoading = true;
-let isMusicPlayerOpen = false;
-let isPlaying = false;
-let currentTrackIndex = 0;
-let currentTime = 0;
-let totalDuration = 218; // 3:38 in seconds
 
-// Music tracks data
-const musicTracks = [
-    {
-        title: "Sunflower",
-        artist: "Post Malone, Swae Lee",
-        duration: 218 // 3:38
-    },
-    {
-        title: "Circles",
-        artist: "Post Malone",
-        duration: 215 // 3:35
-    },
-    {
-        title: "Blinding Lights", 
-        artist: "The Weeknd",
-        duration: 200 // 3:20
-    },
-    {
-        title: "Levitating",
-        artist: "Dua Lipa",
-        duration: 203 // 3:23
-    }
-];
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -66,7 +38,6 @@ function initializeApp() {
     initializeWindows();
     initializeDesktopInteractions();
     initializeDarkMode();
-    initializeMusicPlayer();
     
     // Show portfolio window by default with faster animation
     setTimeout(() => {
@@ -75,119 +46,9 @@ function initializeApp() {
     
     // Update time every second
     setInterval(updateDateTime, 1000);
-    setInterval(updateMusicProgress, 1000);
 }
 
-// Music Player functions
-function initializeMusicPlayer() {
-    updateMusicInfo();
-    
-    // Volume slider functionality
-    const volumeSlider = document.getElementById('volumeSlider');
-    if (volumeSlider) {
-        volumeSlider.addEventListener('input', function() {
-            // Volume control would be implemented here with actual audio
-            console.log('Volume:', this.value + '%');
-        });
-    }
-    
-    // Progress bar click functionality
-    const progressBar = document.querySelector('.progress-bar');
-    if (progressBar) {
-        progressBar.addEventListener('click', function(e) {
-            const rect = this.getBoundingClientRect();
-            const percent = (e.clientX - rect.left) / rect.width;
-            currentTime = Math.floor(percent * totalDuration);
-            updateProgressBar();
-        });
-    }
-}
 
-function toggleMusicPlayer() {
-    const musicPanel = document.getElementById('musicPanel');
-    isMusicPlayerOpen = !isMusicPlayerOpen;
-    
-    if (isMusicPlayerOpen) {
-        musicPanel.classList.add('show');
-    } else {
-        musicPanel.classList.remove('show');
-    }
-}
-
-function togglePlay() {
-    const playBtn = document.getElementById('playBtn');
-    isPlaying = !isPlaying;
-    
-    if (isPlaying) {
-        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        // Start music playback simulation
-        console.log('Playing:', musicTracks[currentTrackIndex].title);
-    } else {
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        // Pause music playback
-        console.log('Paused');
-    }
-}
-
-function previousTrack() {
-    currentTrackIndex = (currentTrackIndex - 1 + musicTracks.length) % musicTracks.length;
-    currentTime = 0;
-    updateMusicInfo();
-    updateProgressBar();
-    console.log('Previous track:', musicTracks[currentTrackIndex].title);
-}
-
-function nextTrack() {
-    currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
-    currentTime = 0;
-    updateMusicInfo();
-    updateProgressBar();
-    console.log('Next track:', musicTracks[currentTrackIndex].title);
-}
-
-function updateMusicInfo() {
-    const songTitle = document.getElementById('songTitle');
-    const songArtist = document.getElementById('songArtist');
-    const totalTime = document.getElementById('totalTime');
-    
-    if (songTitle && songArtist && totalTime) {
-        const track = musicTracks[currentTrackIndex];
-        songTitle.textContent = track.title;
-        songArtist.textContent = track.artist;
-        totalTime.textContent = formatTime(track.duration);
-        totalDuration = track.duration;
-    }
-}
-
-function updateMusicProgress() {
-    if (isPlaying && currentTime < totalDuration) {
-        currentTime++;
-        updateProgressBar();
-    } else if (currentTime >= totalDuration && isPlaying) {
-        // Auto play next track
-        nextTrack();
-        if (isPlaying) {
-            setTimeout(togglePlay, 100); // Resume playing
-        }
-    }
-}
-
-function updateProgressBar() {
-    const progress = document.getElementById('progress');
-    const currentTimeElement = document.getElementById('currentTime');
-    
-    if (progress && currentTimeElement) {
-        const progressPercent = (currentTime / totalDuration) * 100;
-        progress.style.width = progressPercent + '%';
-        currentTimeElement.textContent = formatTime(currentTime);
-    }
-}
-
-function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-}
 
 // Dark Mode functions
 function initializeDarkMode() {
@@ -228,6 +89,7 @@ function updateDateTime() {
     const now = new Date();
     const timeElement = document.getElementById('current-time');
     const dateElement = document.getElementById('current-date');
+    const periodElement = document.getElementById('current-period');
     
     if (timeElement) {
         timeElement.textContent = now.toLocaleTimeString('en-US', {
@@ -237,12 +99,16 @@ function updateDateTime() {
         });
     }
     
+    if (periodElement) {
+        const hour = now.getHours();
+        periodElement.textContent = hour < 12 ? 'AM' : 'PM';
+    }
+    
     if (dateElement) {
-        dateElement.textContent = now.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        });
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        dateElement.textContent = `${year}-${month}-${day}`;
     }
 }
 
@@ -260,17 +126,9 @@ function toggleStartMenu() {
 document.addEventListener('click', function(event) {
     const startMenu = document.getElementById('startMenu');
     const startButton = document.querySelector('.start-button');
-    const musicPlayer = document.querySelector('.music-player');
     
     if (!startMenu.contains(event.target) && !startButton.contains(event.target)) {
         startMenu.classList.remove('show');
-    }
-    
-    // Close music player when clicking outside
-    if (!musicPlayer.contains(event.target) && isMusicPlayerOpen) {
-        const musicPanel = document.getElementById('musicPanel');
-        musicPanel.classList.remove('show');
-        isMusicPlayerOpen = false;
     }
 });
 
@@ -386,18 +244,8 @@ function maximizeWindow(windowId) {
 }
 
 function updateTaskbar(windowId, isActive) {
-    // Remove active class from all taskbar apps
-    document.querySelectorAll('.taskbar-app').forEach(app => {
-        app.classList.remove('active');
-    });
-    
-    // Add active class to current app if it's active
-    if (isActive) {
-        const taskbarApp = document.querySelector(`[onclick="showWindow('${windowId}')"]`);
-        if (taskbarApp) {
-            taskbarApp.classList.add('active');
-        }
-    }
+    // Taskbar apps have been removed, so this function is no longer needed
+    // Keep function for compatibility but remove functionality
 }
 
 function bringToFront(window) {
@@ -605,21 +453,7 @@ document.addEventListener('keydown', function(event) {
         }
     }
     
-    // Music player shortcuts
-    if (event.code === 'Space' && isMusicPlayerOpen) {
-        event.preventDefault();
-        togglePlay();
-    }
-    
-    if (event.key === 'ArrowLeft' && isMusicPlayerOpen) {
-        event.preventDefault();
-        previousTrack();
-    }
-    
-    if (event.key === 'ArrowRight' && isMusicPlayerOpen) {
-        event.preventDefault();
-        nextTrack();
-    }
+
 });
 
 function switchToNextWindow() {
@@ -698,7 +532,6 @@ function showContextMenu(x, y) {
     
     const menuItems = [
         { text: 'Refresh', icon: 'fas fa-sync-alt', action: () => location.reload() },
-        { text: 'Music Player', icon: 'fas fa-music', action: () => toggleMusicPlayer() },
         { text: 'Organize Desktop', icon: 'fas fa-th', action: () => organizeDesktop() },
         { text: 'Toggle Dark Mode', icon: 'fas fa-moon', action: () => toggleDarkMode() },
         { text: 'About Windows', icon: 'fas fa-info-circle', action: () => showWindow('about') },
@@ -886,8 +719,6 @@ console.log(`
 ║  • Escape: Close active window       ║
 ║  • Ctrl + D: Toggle dark mode        ║
 ║  • F11: Maximize window              ║
-║  • Space: Play/Pause music           ║
-║  • ← →: Previous/Next track          ║
 ║  • Right-click: Context menu         ║
 ╚══════════════════════════════════════╝
 `);
@@ -940,9 +771,7 @@ function showSystemInfo() {
         'Color Depth': `${screen.colorDepth}-bit`,
         'Language': navigator.language,
         'Platform': navigator.platform,
-        'Dark Mode': isDarkMode ? 'Enabled' : 'Disabled',
-        'Music Player': isMusicPlayerOpen ? 'Open' : 'Closed',
-        'Current Track': isPlaying ? musicTracks[currentTrackIndex].title : 'Not Playing'
+        'Dark Mode': isDarkMode ? 'Enabled' : 'Disabled'
     };
     
     let infoText = 'System Information:\n\n';
