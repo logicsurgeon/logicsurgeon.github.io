@@ -265,29 +265,52 @@ function adjustTypingTextPosition() {
     const isMobile = windowWidth <= 768;
     
     const taskbarHeight = 48;
-    const iconContainerHeight = isMobile ? 200 : 120; // Mobile icons take more space (2x2 grid)
+    const iconContainerHeight = isMobile ? 200 : 120;
     const bottomPadding = isMobile ? 100 : 100;
     const textBuffer = isMobile ? 30 : 50;
-    
-    // Calculate the maximum Y position for the text (icons top position - buffer)
-    const iconsTopPosition = windowHeight - taskbarHeight - bottomPadding - iconContainerHeight;
-    const maxTextBottom = iconsTopPosition - textBuffer;
-    
-    // Calculate default text position (50% for desktop, 40% for mobile)
-    const defaultTopPercentage = isMobile ? 40 : 50;
-    const defaultTextCenter = windowHeight * (defaultTopPercentage / 100);
     const textHeight = isMobile ? 50 : 60;
+    
+    // Calculate default positions
+    const defaultTextTopPercentage = isMobile ? 40 : 50;
+    const defaultTextCenter = windowHeight * (defaultTextTopPercentage / 100);
     const defaultTextBottom = defaultTextCenter + (textHeight / 2);
     
-    // If text would overlap with icons, move it up
-    if (defaultTextBottom > maxTextBottom) {
-        const newTextCenter = maxTextBottom - (textHeight / 2);
-        const newTopPercentage = (newTextCenter / windowHeight) * 100;
+    // Calculate available space for icons at default text position
+    const availableSpaceForIcons = windowHeight - defaultTextBottom - textBuffer - taskbarHeight;
+    const neededSpaceForIcons = iconContainerHeight + bottomPadding;
+    
+    // If there's not enough space, create the "pushing" effect
+    if (availableSpaceForIcons < neededSpaceForIcons) {
+        // Calculate compression ratio (how much we're squeezing the space)
+        const compressionRatio = availableSpaceForIcons / neededSpaceForIcons;
+        const deficit = neededSpaceForIcons - availableSpaceForIcons;
+        
+        // Text moves up less aggressively
+        const textUpMovement = deficit * 0.6; // Text moves 60% of the deficit
+        const newTextCenter = defaultTextCenter - textUpMovement;
+        const newTextTopPercentage = (newTextCenter / windowHeight) * 100;
         const minTopPercentage = isMobile ? 10 : 15;
-        typingBg.style.top = Math.max(minTopPercentage, newTopPercentage) + '%';
+        const finalTextTopPercentage = Math.max(minTopPercentage, newTextTopPercentage);
+        
+        // Icons get pushed down more (creating the "pushing" effect)
+        const iconPushMovement = deficit * 0.4; // Icons move 40% of the deficit
+        const maxIconPush = isMobile ? 50 : 80; // Limit maximum push distance
+        const finalIconPush = Math.min(iconPushMovement, maxIconPush);
+        
+        // Apply smooth transitions
+        typingBg.style.top = finalTextTopPercentage + '%';
+        iconsContainer.style.transform = `translateY(${finalIconPush}px)`;
+        
+        // Add subtle scale effect for more dynamic feel
+        if (compressionRatio < 0.7) {
+            const scaleEffect = 0.95 + (compressionRatio * 0.05); // Slight scale down when very compressed
+            iconsContainer.style.transform += ` scale(${scaleEffect})`;
+        }
+        
     } else {
-        // Reset to default position when there's enough space
-        typingBg.style.top = defaultTopPercentage + '%';
+        // Smooth return to default positions
+        typingBg.style.top = defaultTextTopPercentage + '%';
+        iconsContainer.style.transform = 'translateY(0px) scale(1)';
     }
 }
 

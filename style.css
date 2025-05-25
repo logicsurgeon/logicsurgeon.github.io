@@ -440,7 +440,7 @@ body {
     transform: translate(-50%, -50%);
     z-index: 1;
     font-family: 'Courier New', monospace;
-    transition: top 0.3s ease;
+    transition: top 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .typing-text-bg {
@@ -485,6 +485,7 @@ body {
     gap: 40px;
     align-items: center;
     justify-content: center;
+    transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .desktop-icon {
@@ -1228,6 +1229,7 @@ body {
         align-items: center;
         max-width: 280px;
         margin: 0 auto;
+        transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
     }
     
     .desktop-icon {
@@ -1290,7 +1292,7 @@ body {
         right: auto;
         bottom: auto;
         text-align: center;
-        transition: top 0.3s ease;
+        transition: top 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
     }
     
     .typing-text-bg {
