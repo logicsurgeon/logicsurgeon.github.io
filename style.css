@@ -88,7 +88,7 @@ body {
     text-align: center;
     transform: translateY(100%);
     opacity: 0;
-    animation: textScroll 4s linear forwards;
+    animation: textScroll 6s linear forwards;
     animation-delay: 1.5s;
 }
 
